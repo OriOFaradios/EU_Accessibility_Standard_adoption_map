@@ -1,16 +1,38 @@
 {
-  "FR": "adopted",
-  "DE": "adopted",
-  "ES": "referenced only",
-  "IT": "pending",
-  "NL": "adopted",
-  "BE": "adopted",
-  "SE": "adopted",
-  "FI": "adopted",
-  "DK": "referenced only",
-  "PL": "pending",
-  "US": "referenced only",
-  "CN": "pending",
-  "JP": "adopted"
+  "AUT": "adopted",
+  "BEL": "adopted",
+  "BGR": "adopted",
+  "HRV": "adopted",
+  "CYP": "adopted",
+  "CZE": "adopted",
+  "DNK": "adopted",
+  "EST": "adopted",
+  "FIN": "adopted",
+  "FRA": "adopted",
+  "DEU": "adopted",
+  "GRC": "adopted",
+  "HUN": "adopted",
+  "IRL": "adopted",
+  "ITA": "adopted",
+  "LVA": "adopted",
+  "LTU": "adopted",
+  "LUX": "adopted",
+  "MLT": "adopted",
+  "NLD": "adopted",
+  "POL": "adopted",
+  "PRT": "adopted",
+  "ROU": "adopted",
+  "SVK": "adopted",
+  "SVN": "adopted",
+  "ESP": "adopted",
+  "SWE": "adopted",
+  "ISL": "adopted",   // Islandia (EFTA) según guía de adopción más amplia :contentReference[oaicite:4]{index=4}
+  "NOR": "adopted",   // Noruega (EFTA) :contentReference[oaicite:5]{index=5}
+  "CHE": "adopted",   // Suiza, mencionada por algunos como parte de adopción :contentReference[oaicite:6]{index=6}
+  "TUR": "adopted",   // Turquía, mencionada por LevelAccess :contentReference[oaicite:7]{index=7}
+  "CAN": "adopted",   // Canadá tiene versión nacionalizada EN 301 549:2024 :contentReference[oaicite:8]{index=8}
+  "AUS": "adopted",   // Australia tiene AS EN 301 549 :contentReference[oaicite:9]{index=9},
+  "JPN": "referenced only", // Japón: hay mención de adaptación inspirada en EN 301 549 :contentReference[oaicite:10]{index=10}
+  "IND": "referenced only", // India: mencionada como adoptando una versión :contentReference[oaicite:11]{index=11}
+  "KEN": "unknown"   // Kenia: no encontré evidencia sólida pública para EN 301 549; inABLE report menciona gap assessments :contentReference[oaicite:12]{index=12}
 }
-
