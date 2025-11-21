@@ -23,7 +23,7 @@ function loadGeoJSON() {
     .then(geojsonData => {
       L.geoJSON(geojsonData, {
         style: feature => {
-          const countryCode = feature.properties.ISO_A2;
+          const countryCode = feature.properties.iso_a3;
           const status = adoptionData[countryCode];
           let color;
           if (status === 'adopted') color = '#2ca02c';       // verde
@@ -33,7 +33,7 @@ function loadGeoJSON() {
           return { color: '#333', weight: 1, fillColor: color, fillOpacity: 0.7 };
         },
         onEachFeature: (feature, layer) => {
-          const countryCode = feature.properties.ISO_A2;
+          const countryCode = feature.properties.iso_a3;
           const status = adoptionData[countryCode] || 'unknown';
           layer.bindPopup(`<strong>${feature.properties.ADMIN}</strong><br>Status: ${status}`);
         }
