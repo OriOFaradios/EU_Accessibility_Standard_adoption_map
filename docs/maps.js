@@ -1,7 +1,8 @@
 const map = L.map('map').setView([20, 0], 2);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 5
+  maxZoom: 5,
+  attribution: '© OpenStreetMap' 
 }).addTo(map);
 
 Promise.all([
