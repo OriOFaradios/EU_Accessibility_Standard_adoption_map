@@ -1,38 +1,42 @@
+// Crear el mapa centrado en Europa .setView([54, 15], 4)
 const map = L.map('map').setView([20, 0], 2);
 
+// Capa base de OpenStreetMap
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 5,
   attribution: '© OpenStreetMap' 
 }).addTo(map);
 
-Promise.all([
-  fetch('world.geojson').then(r => r.json()),
-  fetch('adoption.json').then(r => r.json())
-]).then(([world, adoption]) => {
+// Cargar datos de adopción
+let adoptionData = {};
+fetch('adoption.json')
+  .then(response => response.json())
+  .then(data => {
+    adoptionData = data;
+    loadGeoJSON();
+  });
 
-  function colorFor(code) {
-    if (code === 'IDT') return '#1a9850';
-    if (code === 'Modified') return '#fee08b';
-    if (code === 'Referenced') return '#d73027';
-    if (code === 'Procurement') return '#4575b4';
-    return '#cccccc';
-  }
-
-  L.geoJSON(world, {
-    style: feature => {
-      const iso = feature.properties.ISO_A2;
-      const tipo = adoption[iso];
-      return {
-        color: '#444',
-        weight: 1,
-        fillColor: colorFor(tipo),
-        fillOpacity: 0.85
-      };
-    },
-    onEachFeature: (feature, layer) => {
-      const iso = feature.properties.ISO_A2;
-      const tipo = adoption[iso] ?? 'Sin datos';
-      layer.bindPopup(`<strong>${feature.properties.ADMIN}</strong><br>${tipo}`);
-    }
-  }).addTo(map);
-});
+// Función para cargar la capa GeoJSON de países
+function loadGeoJSON() {
+  fetch('world.geojson')
+    .then(response => response.json())
+    .then(geojsonData => {
+      L.geoJSON(geojsonData, {
+        style: feature => {
+          const countryCode = feature.properties.ISO_A2;
+          const status = adoptionData[countryCode];
+          let color;
+          if (status === 'adopted') color = '#2ca02c';       // verde
+          else if (status === 'referenced only') color = '#ff7f0e'; // naranja
+          else if (status === 'pending') color = '#d62728';  // rojo
+          else color = '#ccc';                                // gris
+          return { color: '#333', weight: 1, fillColor: color, fillOpacity: 0.7 };
+        },
+        onEachFeature: (feature, layer) => {
+          const countryCode = feature.properties.ISO_A2;
+          const status = adoptionData[countryCode] || 'unknown';
+          layer.bindPopup(`<strong>${feature.properties.ADMIN}</strong><br>Status: ${status}`);
+        }
+      }).addTo(map);
+    });
+}
