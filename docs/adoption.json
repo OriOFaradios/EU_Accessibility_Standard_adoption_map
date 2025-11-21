@@ -1,8 +1,16 @@
 {
-  "FR": "IDT",
-  "ES": "IDT",
-  "DE": "Modified",
-  "IT": "Referenced",
-  "PL": "Procurement",
-  "NL": "None"
+  "FR": "adopted",
+  "DE": "adopted",
+  "ES": "referenced only",
+  "IT": "pending",
+  "NL": "adopted",
+  "BE": "adopted",
+  "SE": "adopted",
+  "FI": "adopted",
+  "DK": "referenced only",
+  "PL": "pending",
+  "US": "referenced only",
+  "CN": "pending",
+  "JP": "adopted"
 }
+
