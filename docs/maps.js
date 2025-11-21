@@ -1,42 +1,71 @@
-// Crear el mapa centrado en Europa .setView([54, 15], 4)
-const map = L.map('map').setView([20, 0], 2);
+// maps.js
+// Muestra un mapa mundial con estados de adopción EN 301 549
 
-// Capa base de OpenStreetMap
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 5,
-  attribution: '© OpenStreetMap' 
+// Configuración de colores según estatus
+const statusColors = {
+  "adopted": "#2ca02c",       // verde
+  "referenced only": "#ff7f0e", // naranja
+  "unknown": "#d3d3d3"         // gris
+};
+
+let map = L.map('map').setView([20, 0], 2); // vista inicial centrada en el mundo
+
+// Capa de OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// Cargar datos de adopción
+// Cargar adoption.json
 let adoptionData = {};
 fetch('adoption.json')
   .then(response => response.json())
   .then(data => {
     adoptionData = data;
-    loadGeoJSON();
-  });
+    loadWorldGeoJSON();
+  })
+  .catch(err => console.error("Error loading adoption.json:", err));
 
-// Función para cargar la capa GeoJSON de países
-function loadGeoJSON() {
+// Cargar world.geojson
+function loadWorldGeoJSON() {
   fetch('world.geojson')
     .then(response => response.json())
     .then(geojsonData => {
       L.geoJSON(geojsonData, {
-        style: feature => {
-          const countryCode = feature.properties.id;
-          const status = adoptionData[countryCode];
-          let color;
-          if (status === 'adopted') color = '#2ca02c';       // verde
-          else if (status === 'referenced only') color = '#ff7f0e'; // naranja
-          else if (status === 'pending') color = '#d62728';  // rojo
-          else color = '#ccc';                                // gris
-          return { color: '#333', weight: 1, fillColor: color, fillOpacity: 0.7 };
-        },
-        onEachFeature: (feature, layer) => {
-          const countryCode = feature.properties.id;
-          const status = adoptionData[countryCode] || 'unknown';
-          layer.bindPopup(`<strong>${feature.properties.ADMIN}</strong><br>Status: ${status}`);
-        }
+        style: styleFeature,
+        onEachFeature: onEachFeature
       }).addTo(map);
-    });
+    })
+    .catch(err => console.error("Error loading world.geojson:", err));
+}
+
+// Definir estilo de cada país según adopción
+function styleFeature(feature) {
+  const countryCode = feature.id;  // usar 'id' del geojson
+  const status = adoptionData[countryCode] || 'unknown';
+  return {
+    fillColor: statusColors[status],
+    weight: 1,
+    opacity: 1,
+    color: 'white',
+    dashArray: '3',
+    fillOpacity: 0.7
+  };
+}
+
+// Tooltips y hover
+function onEachFeature(feature, layer) {
+  const countryCode = feature.id;
+  const countryName = feature.properties.name;
+  const status = adoptionData[countryCode] || 'unknown';
+  
+  layer.bindTooltip(`${countryName}<br>Status: ${status}`);
+  
+  layer.on({
+    mouseover: function(e) {
+      e.target.setStyle({ weight: 2, color: '#666', fillOpacity: 0.9 });
+    },
+    mouseout: function(e) {
+      e.target.setStyle({ weight: 1, color: 'white', fillOpacity: 0.7 });
+    }
+  });
 }
