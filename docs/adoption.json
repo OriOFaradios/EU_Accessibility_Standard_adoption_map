@@ -1,37 +1,37 @@
 {
-  "AUS": "adopted",        // Australia adoptó la norma como AS EN 301 549 según fuentes de accesibilidad. :contentReference[oaicite:0]{index=0}  
-  "AUT": "adopted",        // Austria, miembro de la UE. :contentReference[oaicite:1]{index=1}  
-  "BEL": "adopted",        // Bélgica, UE. :contentReference[oaicite:2]{index=2}  
-  "BGR": "adopted",        // Bulgaria, UE. :contentReference[oaicite:3]{index=3}  
-  "CAN": "adopted",        // Canadá adoptó EN 301 549 como CAN/ASC – EN 301 549:2024. :contentReference[oaicite:4]{index=4}  
-  "CHE": "adopted",        // Suiza, según fuentes de LevelAccess. :contentReference[oaicite:5]{index=5}  
-  "CYP": "adopted",        // Chipre, UE. :contentReference[oaicite:6]{index=6}  
-  "CZE": "adopted",        // República Checa, UE. :contentReference[oaicite:7]{index=7}  
-  "DEU": "adopted",        // Alemania, UE. :contentReference[oaicite:8]{index=8}  
-  "DNK": "adopted",        // Dinamarca, UE. :contentReference[oaicite:9]{index=9}  
-  "ESP": "adopted",        // España, UE. :contentReference[oaicite:10]{index=10}  
-  "EST": "adopted",        // Estonia, UE. :contentReference[oaicite:11]{index=11}  
-  "FIN": "adopted",        // Finlandia, UE. :contentReference[oaicite:12]{index=12}  
-  "FRA": "adopted",        // Francia, UE. :contentReference[oaicite:13]{index=13}  
-  "GRC": "adopted",        // Grecia, UE. :contentReference[oaicite:14]{index=14}  
-  "HUN": "adopted",        // Hungría, UE. :contentReference[oaicite:15]{index=15}  
-  "ISL": "adopted",        // Islandia, EFTA. :contentReference[oaicite:16]{index=16}  
-  "IRL": "adopted",        // Irlanda, UE. :contentReference[oaicite:17]{index=17}  
-  "ITA": "adopted",        // Italia, UE. :contentReference[oaicite:18]{index=18}  
-  "LVA": "adopted",        // Letonia, UE. :contentReference[oaicite:19]{index=19}  
-  "LTU": "adopted",        // Lituania, UE. :contentReference[oaicite:20]{index=20}  
-  "LUX": "adopted",        // Luxemburgo, UE. :contentReference[oaicite:21]{index=21}  
-  "MLT": "adopted",        // Malta, UE. :contentReference[oaicite:22]{index=22}  
-  "NLD": "adopted",        // Países Bajos, UE. :contentReference[oaicite:23]{index=23}  
-  "NOR": "adopted",        // Noruega, EFTA. :contentReference[oaicite:24]{index=24}  
-  "POL": "adopted",        // Polonia, UE. :contentReference[oaicite:25]{index=25}  
-  "PRT": "adopted",        // Portugal, UE. :contentReference[oaicite:26]{index=26}  
-  "ROU": "adopted",        // Rumanía, UE. :contentReference[oaicite:27]{index=27}  
-  "SVK": "adopted",        // Eslovaquia, UE. :contentReference[oaicite:28]{index=28}  
-  "SVN": "adopted",        // Eslovenia, UE. :contentReference[oaicite:29]{index=29}  
-  "SWE": "adopted",        // Suecia, UE. :contentReference[oaicite:30]{index=30}  
-  "TUR": "adopted",        // Turquía, según TPGi. :contentReference[oaicite:31]{index=31}  
-  "IND": "reference only", // India: mencionada como inspirada por EN 301 549. :contentReference[oaicite:32]{index=32}  
-  "JPN": "reference only", // Japón: mencionada por Cerovac. :contentReference[oaicite:33]{index=33}  
-  "UNK": "unknown"         // Placeholder “unknown” genérico si no se sabe otro país.  
+  "AUS": "adopted",
+  "AUT": "adopted",
+  "BEL": "adopted",
+  "BGR": "adopted",
+  "CAN": "adopted",
+  "CHE": "adopted",
+  "CYP": "adopted",
+  "CZE": "adopted",
+  "DEU": "adopted",
+  "DNK": "adopted",
+  "ESP": "adopted",
+  "EST": "adopted",
+  "FIN": "adopted",
+  "FRA": "adopted",
+  "GRC": "adopted",
+  "HUN": "adopted",
+  "ISL": "adopted",
+  "IRL": "adopted",
+  "ITA": "adopted",
+  "LVA": "adopted",
+  "LTU": "adopted",
+  "LUX": "adopted",
+  "MLT": "adopted",
+  "NLD": "adopted",
+  "NOR": "adopted",
+  "POL": "adopted",
+  "PRT": "adopted",
+  "ROU": "adopted",
+  "SVK": "adopted",
+  "SVN": "adopted",
+  "SWE": "adopted",
+  "TUR": "adopted",
+  "IND": "reference only",
+  "JPN": "reference only",
+  "UNK": "unknown"
 }
