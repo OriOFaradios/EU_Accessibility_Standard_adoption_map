@@ -31,7 +31,7 @@
   "SVN": "adopted",
   "SWE": "adopted",
   "TUR": "adopted",
-  "IND": "reference only",
-  "JPN": "reference only",
+  "IND": "referenced only",
+  "JPN": "referenced only",
   "UNK": "unknown"
 }
