@@ -4,7 +4,7 @@
 // Colores por estatus
 const statusColors = {
   "adopted": "#2ca02c",       // verde
-  "referenced only": "#ff7f0e", // naranja
+  "referenced": "#ff7f0e", // naranja
   "unknown": "#d3d3d3"         // gris
 };
 
