@@ -46,7 +46,7 @@ fetch('adoption.json')
   });
 
 // Leyenda simple y visible
-const legend = L.control({ position: 'topright' });
+const legend = L.control({ position: 'topleft' });
 
 legend.onAdd = function () {
   const div = L.DomUtil.create('div', 'info legend');
