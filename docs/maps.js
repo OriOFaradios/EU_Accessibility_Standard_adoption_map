@@ -6,7 +6,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 Promise.all([
   fetch('world.geojson').then(r => r.json()),
-  fetch('adopcion.json').then(r => r.json())
+  fetch('adoption.json').then(r => r.json())
 ]).then(([world, adoption]) => {
 
   function colorFor(code) {
