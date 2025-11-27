@@ -34,7 +34,17 @@ fetch('adoption.json')
             fillOpacity: 0.7
           }),
           onEachFeature: (feature, layer) => {
-            const status = adoptionData[feature.id] || 'unknown';
+            const item = adoptionData[feature.id] || 'unknown';
+            let tooltipContent = `<strong>${feature.properties.name}</strong><br>Status: ${item.status}`;
+              if (item.reference) {
+              tooltipContent += `<br><a href="${item.reference}" target="_blank">Referencia</a>`;
+              }
+              if (item.note) {
+              tooltipContent += `<br>${item.note}`;
+              }
+              if (item.version) {
+              tooltipContent += `<br>Versión: ${item.version}`;
+              }
             layer.bindTooltip(`${feature.properties.name}<br>Status: ${status}`);
             layer.on({
               mouseover: e => e.target.setStyle({ weight: 2, color: '#666', fillOpacity: 0.9 }),
