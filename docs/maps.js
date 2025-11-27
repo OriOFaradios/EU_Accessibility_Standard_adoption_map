@@ -1,8 +1,10 @@
 // maps.js
 // Mapa mundial mostrando adopción de EN 301 549 usando Leaflet.
 
-// 1. Crear mapa
-const map = L.map('map').setView([20, 0], 2);
+// Crear mapa
+const map = L.map('map', {
+  worldCopyJump: true
+}).setView([20, 0], 2);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 6,
@@ -10,22 +12,22 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// 2. Colores según estatus
+// Colores según estatus
 const statusColors = {
-  adopted: '#2ca02c',    // verde
-  referenced: '#ff7f0e', // naranja
-  unknown: '#d3d3d3'     // gris
+  adopted: '#2ca02c',
+  referenced: '#ff7f0e',
+  unknown: '#d3d3d3'
 };
 
-// 3. Cargar datos y dibujar mapa
+// Cargar datos (GeoJSON + adoption.json)
 Promise.all([
   fetch('world.geojson').then(r => r.json()),
   fetch('adoption.json').then(r => r.json())
 ]).then(([geojsonData, adoptionData]) => {
 
   const style = feature => {
-    const code = feature.id;
-    const item = adoptionData[code];
+    const iso = feature.properties.ISO_A3;
+    const item = adoptionData[iso];
     const status = item ? item.status : 'unknown';
 
     return {
@@ -38,17 +40,23 @@ Promise.all([
   };
 
   const onEachFeature = (feature, layer) => {
-    const code = feature.id;
-    const item = adoptionData[code];
+    const iso = feature.properties.ISO_A3;
+    const item = adoptionData[iso];
 
-    let tooltip = `<strong>${feature.properties.name}</strong>`;
+    let tooltip = `<strong>${feature.properties.ADMIN}</strong>`;
 
     if (!item) {
-      tooltip += `<br>Status: unknown`;
+      tooltip += `<br>Estado: unknown`;
     } else {
-      tooltip += `<br>Status: ${item.status}`;
-      if (item.version) tooltip += `<br>Version: ${item.version}`;
-      if (item.source) tooltip += `<br><a href="${item.source}" target="_blank">Source</a>`;
+      tooltip += `<br>Estado: ${item.status}`;
+
+      if (item.version) {
+        tooltip += `<br>Versión: ${item.version}`;
+      }
+
+      if (item.source) {
+        tooltip += `<br><a href="${item.source}" target="_blank">Fuente</a>`;
+      }
     }
 
     layer.bindTooltip(tooltip, { sticky: true });
@@ -59,16 +67,20 @@ Promise.all([
     });
   };
 
-  L.geoJSON(geojsonData, {
+  const geoLayer = L.geoJSON(geojsonData, {
     style,
     onEachFeature
   }).addTo(map);
+
+  // Ajustar vista para que el mapa aparezca en tamaño correcto
+  map.fitBounds(geoLayer.getBounds());
+  setTimeout(() => map.invalidateSize(), 300);
 });
 
-// 4. Leyenda
+// Leyenda
 const legend = L.control({ position: 'topleft' });
 
-legend.onAdd = function () {
+legend.onAdd = () => {
   const div = L.DomUtil.create('div', 'info legend');
   div.style.background = 'rgba(255,255,255,0.85)';
   div.style.padding = '8px 10px';
@@ -77,7 +89,7 @@ legend.onAdd = function () {
   div.style.fontSize = '14px';
   div.style.boxShadow = '0 0 8px rgba(0,0,0,0.2)';
 
-  div.innerHTML = `<strong>EN 301 549 status</strong><br>`;
+  div.innerHTML = `<strong>EN 301 549</strong><br>`;
 
   for (const status in statusColors) {
     div.innerHTML += `
@@ -88,8 +100,7 @@ legend.onAdd = function () {
         background:${statusColors[status]};
         margin-right:6px;
         border:1px solid #777;
-      "></span> ${status}<br>
-    `;
+      "></span>${status}<br>`;
   }
 
   return div;
