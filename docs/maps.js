@@ -36,11 +36,8 @@ fetch('adoption.json')
           onEachFeature: (feature, layer) => {
             const item = adoptionData[feature.id] || 'unknown';
             let tooltipContent = `<strong>${feature.properties.name}</strong><br>Status: ${item.status}`;
-              if (item.reference) {
-              tooltipContent += `<br><a href="${item.reference}" target="_blank">Referencia</a>`;
-              }
-              if (item.note) {
-              tooltipContent += `<br>${item.note}`;
+              if (item.source) {
+              tooltipContent += `<br><a href="${item.source}" target="_blank">Source</a>`;
               }
               if (item.version) {
               tooltipContent += `<br>Versión: ${item.version}`;
