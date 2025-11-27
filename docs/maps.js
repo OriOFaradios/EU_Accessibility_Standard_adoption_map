@@ -16,17 +16,16 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // 2. Colores según estatus
 // -----------------------------------------------
 const statusColors = {
-  adopted: '#4CAF50',
-  referenced: '#FFC107',
-  'in-progress': '#03A9F4',
-  unknown: '#BDBDBD'
+  adopted: '#2ca02c', //verde
+  referenced: '#ff7f0e', //naranja
+  unknown: '#d3d3d3' //gris
 };
 
 // -----------------------------------------------
 // 3. Cargar datos y dibujar mapa
 // -----------------------------------------------
 Promise.all([
-  fetch('countries.geojson').then(r => r.json()),
+  fetch('world.geojson').then(r => r.json()),
   fetch('adoption.json').then(r => r.json())
 ]).then(([geojsonData, adoptionData]) => {
 
