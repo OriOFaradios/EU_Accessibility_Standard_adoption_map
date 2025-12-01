@@ -8,21 +8,41 @@
   <link rel="icon" href="assets/favicon_acc" type="image/png">
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <style>
-    #map {
-  width: 100%;
-  height: 100vh;
-  height: 100svh;  /* Android moderno prioriza esta */
-    }
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
+      overscroll-behavior: none;
+    }
+
+    #map {
+      width: 100%;
+      height: 100dvh;        /* altura real del viewport en móviles */
+      min-height: 100dvh;    /* estabilidad en Android */
+      touch-action: none;    /* evita saltos del viewport en Android */
     }
   </style>
 </head>
+
 <body>
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    /* Forzamos que Leaflet mida el tamaño real */
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        if (window.map && typeof window.map.invalidateSize === "function") {
+          window.map.invalidateSize();
+        }
+      }, 200);
+    });
+  </script>
+
   <script src="maps.js"></script>
 </body>
 </html>
+
