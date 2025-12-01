@@ -238,7 +238,7 @@
   "TLS": { "status": "unknown", "source": "", "version": "" },
   "TON": { "status": "unknown", "source": "", "version": "" },
   "TTO": { "status": "unknown", "source": "", "version": "" },
-  "TUN": { "status": "unknown", "version": null, "source": ETSI },
+  "TUN": { "status": "unknown", "version": null, "source": "ETSI" },
   "TUR": { "status": "adopted", "source": "", "version": "" },
   "TUV": { "status": "unknown", "source": "", "version": "" },
   "TWN": { "status": "unknown", "source": "", "version": "" },
