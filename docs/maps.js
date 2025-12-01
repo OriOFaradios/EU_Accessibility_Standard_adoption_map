@@ -189,7 +189,7 @@ legend.onAdd = function () {
   div.style.background = 'rgba(255,255,255,0.92)';
   div.style.padding = '10px 12px';
   div.style.borderRadius = '6px';
-  div.style.fontFamily = 'Rubik', 'sans-serif';
+  div.style.fontFamily = 'Rubik, sans-serif';
   div.style.fontSize = '13px';
   div.style.lineHeight = '1.35';
 
