@@ -2,9 +2,26 @@
 // Expects world.geojson uses feature.id = ISO_A3 (but also checks properties.ISO_A3 / properties.iso_a3 / properties.ADM0_A3)
 
 (async function () {
-  // --- map init
-  const map = L.map('map', { worldCopyJump: true, center: [30, 10], zoom: 2, minZoom: 2, maxZoom: 6 });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+// --- map init with restricted bounds
+const southWest = L.latLng(-75, -180);
+const northEast = L.latLng(82, 180);
+const maxBounds = L.latLngBounds(southWest, northEast);
+
+
+const map = L.map('map', {
+worldCopyJump: true,
+center: [35, 10],
+zoom: 2,
+minZoom: 2,
+maxZoom: 6,
+maxBounds: maxBounds,
+maxBoundsViscosity: 1.0
+});
+
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© OpenStreetMap'
+}).addTo(map);
 
   // --- color palette (exact statuses expected)
   const COLORS = {
