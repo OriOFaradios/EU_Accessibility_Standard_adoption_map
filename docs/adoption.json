@@ -12,7 +12,7 @@
   "ATF": { "status": "unknown", "source": "", "version": "" },
   "ATG": { "status": "unknown", "source": "", "version": "" },
   "AUS": { "status": "adopted", "version": "AS EN 301 549:2020", "source": "https://www.standards.org.au/standards-catalogue/standard-details?designation=as-en-301-549-2020" },
-  "AUT": { "status": "adopted", "version": "3.2.1", "source": "[Harmonise EN 301 549|https://digital-strategy.ec.europa.eu/en/policies/latest-changes-accessibility-standard]" },
+  "AUT": { "status": "adopted", "version": "3.2.1", "source": "https://digital-strategy.ec.europa.eu/en/policies/latest-changes-accessibility-standard" },
   "AZE": { "status": "unknown", "source": "", "version": "" },
 
   "BDI": { "status": "unknown", "source": "", "version": "" },
@@ -21,7 +21,7 @@
   "BES": { "status": "unknown", "source": "", "version": "" },
   "BFA": { "status": "unknown", "source": "", "version": "" },
   "BGD": { "status": "unknown", "source": "", "version": "" },
-  "BGR": {{ "status": "adopted", "version": "3.2.1", "source": "https://digital-strategy.ec.europa.eu/en/policies/latest-changes-accessibility-standard" },
+  "BGR": { "status": "adopted", "version": "3.2.1", "source": "https://digital-strategy.ec.europa.eu/en/policies/latest-changes-accessibility-standard" },
   "BHR": { "status": "unknown", "source": "", "version": "" },
   "BHS": { "status": "unknown", "source": "", "version": "" },
   "BIH": { "status": "unknown", "source": "", "version": "" },
