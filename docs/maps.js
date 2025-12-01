@@ -103,16 +103,41 @@
 
   // --- onEachFeature
   function onEachFeature(feature, layer) {
-    totalFeatures++;
-    const iso = isoFromFeature(feature);
-    if (iso && adoptionData[iso]) matched++; else unmatched++;
-    const tt = tooltipHtml(feature);
-    layer.bindTooltip(tt, {sticky:true});
-    layer.on({
-      mouseover: (e) => e.target.setStyle({ weight: 2, color: '#666', fillOpacity: 0.95 }),
-      mouseout: (e) => geoLayer.resetStyle(e.target)
-    });
-  }
+  const props = feature.properties;
+  const country = props.ADMIN;
+  const iso3 = props.ISO_A3;
+
+  const adopt = adoptionData[iso3] || {
+    status: "unknown",
+    version: "N/A",
+    source: null
+  };
+
+  // Tooltip rápido (hover)
+  layer.bindTooltip(
+    `<strong>${country}</strong><br>Status: ${adopt.status}`,
+    { sticky: true }
+  );
+
+  // Popup estable (click)
+  const sourceHtml = adopt.source
+    ? `<a href="${adopt.source}" target="_blank" rel="noopener noreferrer">Official source</a>`
+    : "No official source";
+
+  const popupContent = `
+    <div style="min-width:180px;">
+      <strong>${country}</strong><br>
+      Status: ${adopt.status}<br>
+      Version: ${adopt.version}<br>
+      Source: ${sourceHtml}
+    </div>
+  `;
+
+  layer.on("click", () => {
+    layer.bindPopup(popupContent).openPopup();
+  });
+}
+
 
   // --- Add geo layer
   const geoLayer = L.geoJSON(geojsonData, {
