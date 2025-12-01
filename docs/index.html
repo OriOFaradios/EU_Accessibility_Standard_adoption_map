@@ -11,15 +11,45 @@
 
   <style>
     html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-  }
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
 
-  #map {
-  width: 100%;
-  height: 100dvh; /* el valor correcto en Android moderno */
+    #map {
+      width: 100%;
+      height: 100dvh;
+    }
+
+    /* -------- LEGEND STYLE -------- */
+    .info.legend {
+      background: rgba(255, 255, 255, 0.92);
+      padding: 8px;
+      border-radius: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.3;
+      box-shadow: 0 0 6px rgba(0,0,0,0.25);
+    }
+
+    .info.legend .legend-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .info.legend .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .info.legend .legend-color {
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      border: 1px solid #444;
     }
   </style>
 </head>
@@ -43,4 +73,3 @@
   <script src="maps.js"></script>
 </body>
 </html>
-
