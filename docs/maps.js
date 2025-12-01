@@ -10,7 +10,7 @@ const maxBounds = L.latLngBounds(southWest, northEast);
 
 const map = L.map('map', {
 worldCopyJump: true,
-center: [41, 10],
+center: [48, 10],
 zoom: 2,
 minZoom: 2,
 maxZoom: 6,
