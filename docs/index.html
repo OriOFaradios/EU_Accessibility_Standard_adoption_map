@@ -10,56 +10,76 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: #f8f8f8; /* Evita el gris puro de fondo si el mapa no llena */
-    }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
 
-    #map {
-      width: 100%;
-      height: 100dvh;
-    }
+  #map {
+    width: 100%;
+    height: 100dvh;
+  }
 
-    /* ---- LEGEND REPAIR ---- */
+  /* --- Legend responsive --- */
+  .legend-container {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: clamp(10px, 1.2vw, 14px); /* escala con pantalla */
+    max-width: 240px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.15);
+    backdrop-filter: blur(4px);
+  }
 
-    .leaflet-control.legend {
-      background: rgba(255, 255, 255, 0.92);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-family: sans-serif;
-      font-size: 14px;
-      line-height: 1.4;
-      max-width: 220px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    }
+  .legend-title {
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
 
-    .legend-row {
-      display: flex;
-      align-items: center;
-      margin-top: 6px;
-    }
+  .legend-items {
+    margin-bottom: 8px;
+  }
 
-    .legend-color {
-      width: 16px;
-      height: 16px;
-      border-radius: 3px;
-      margin-right: 8px;
-      display: inline-block;
-    }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+  }
 
-    .legend-link {
-      margin-top: 10px;
-      font-size: 12px;
-    }
+  .legend-item .color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
 
-    .legend-link a {
-      color: #02488d;
-      text-decoration: underline;
+  .legend-footer {
+    font-size: 0.85em;
+    line-height: 1.3;
+  }
+
+  .legend-footer a {
+    color: #02488d;
+  }
+
+  /* Mobile < 480px */
+  @media (max-width: 480px) {
+    .legend-container {
+      max-width: 160px;
+      font-size: clamp(10px, 2.5vw, 13px);
+      padding: 8px;
     }
-  </style>
+    .legend-item .color {
+      width: 12px;
+      height: 12px;
+    }
+  }
+</style>
+
 </head>
 
 <body>
