@@ -189,16 +189,15 @@ legend.onAdd = function () {
   div.style.background = 'rgba(255,255,255,0.92)';
   div.style.padding = '10px 12px';
   div.style.borderRadius = '6px';
-  div.style.fontFamily = 'Rubik, sans-serif';
+  div.style.fontFamily = 'Rubik', sans-serif';
   div.style.fontSize = '13px';
   div.style.lineHeight = '1.35';
 
   // Título
   div.innerHTML = `
     <strong>Accessibility requirements for ICT products and services</strong><br>
-    ETSI EN 301 549<br>
+    <strong>ETSI EN 301 549<br>
   `;
-
   // Filas de estado
   const rows = [
     ['adopted', 'Adopted'],
