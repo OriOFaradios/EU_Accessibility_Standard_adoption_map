@@ -182,42 +182,34 @@ attribution: '© OpenStreetMap'
   }
   
 // --- Legend
+// --- Legend (responsive + zoom-friendly)
 const legend = L.control({ position: 'topright' });
 
 legend.onAdd = function () {
-  const div = L.DomUtil.create('div', 'leaflet-control legend');
+  const div = L.DomUtil.create('div', 'legend-container');
 
   div.innerHTML = `
-    <strong>Accessibility requirements for ICT products and services</strong><br>
-    <strong>ETSI EN 301 549</strong>
-  `;
+    <div class="legend-title">
+      <span>Accessibility requirements for ICT products and services</span><br>
+      <strong>ETSI EN 301 549</strong>
+    </div>
 
-  const rows = [
-    ['adopted', 'Adopted'],
-    ['referenced', 'Referenced'],
-    ['unknown', 'Unknown']
-  ];
+    <div class="legend-items">
+      <div class="legend-item"><span class="color" style="background:${getColor('adopted')}"></span> Adopted</div>
+      <div class="legend-item"><span class="color" style="background:${getColor('referenced')}"></span> Referenced</div>
+      <div class="legend-item"><span class="color" style="background:${getColor('unknown')}"></span> Unknown</div>
+    </div>
 
-  rows.forEach(r => {
-    const row = L.DomUtil.create('div', 'legend-row', div);
-    row.innerHTML = `
-      <span class="legend-color" style="background:${getColor(r[0])}"></span>
-      ${r[1]}
-    `;
-  });
-
-  const link = L.DomUtil.create('div', 'legend-link', div);
-  link.innerHTML = `
-    Want to know more about the latest EN 301 549 revision?<br>
-    Visit the project:
-    <a href="https://labs.etsi.org/rep/HF/en301549" target="_blank">ETSI GitLab</a>
+    <div class="legend-footer">
+      Want to know more about the latest EN 301 549 revision?<br>
+      <a href="https://labs.etsi.org/rep/HF/en301549" target="_blank">ETSI GitLab</a>
+    </div>
   `;
 
   return div;
 };
 
 legend.addTo(map);
-
 
   // --- Diagnostic log summary
   console.info(`adoption.json entries: ${Object.keys(adoptionData).length}`);
