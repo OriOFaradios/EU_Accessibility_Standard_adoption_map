@@ -1,109 +1,138 @@
 // maps.js
-// Mapa mundial mostrando adopción de EN 301 549 usando Leaflet.
+// Mapa Leaflet (usa world.geojson con feature.id = ISO_A3 y adoption.json con claves ISO_A3)
 
-// Crear mapa
-const map = L.map('map', {
-  worldCopyJump: true
-}).setView([20, 0], 2);
+// --- Configuración base del mapa
+let map;
+let geojsonLayer;
+let adoptionData;
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 6,
-  minZoom: 2,
-  attribution: '© OpenStreetMap'
-}).addTo(map);
+function getColor(status) {
+  // Solo los estados reales que usas
+  if (status === "adopted") return "#2ca02c";    // verde
+  if (status === "referenced") return "#ff7f0e"; // naranja
+  return "#d3d3d3";                              // unknown / fallback (gris)
+}
 
-// Colores según estatus
-const statusColors = {
-  adopted: '#2ca02c',
-  referenced: '#ff7f0e',
-  unknown: '#d3d3d3'
-};
+function buildTooltip(iso, props) {
+  const name = props.name || props.ADMIN || "Unknown";
+  const entry = adoptionData[iso];
 
-// Cargar datos (GeoJSON + adoption.json)
-Promise.all([
-  fetch('world.geojson').then(r => r.json()),
-  fetch('adoption.json').then(r => r.json())
-]).then(([geojsonData, adoptionData]) => {
-
-  const style = feature => {
-    const iso = feature.properties.ISO_A3;
-    const item = adoptionData[iso];
-    const status = item ? item.status : 'unknown';
-
-    return {
-      fillColor: statusColors[status],
-      weight: 1,
-      color: 'white',
-      dashArray: '3',
-      fillOpacity: 0.7
-    };
-  };
-
-  const onEachFeature = (feature, layer) => {
-    const iso = feature.properties.ISO_A3;
-    const item = adoptionData[iso];
-
-    let tooltip = `<strong>${feature.properties.ADMIN}</strong>`;
-
-    if (!item) {
-      tooltip += `<br>Estado: unknown`;
-    } else {
-      tooltip += `<br>Estado: ${item.status}`;
-
-      if (item.version) {
-        tooltip += `<br>Versión: ${item.version}`;
-      }
-
-      if (item.source) {
-        tooltip += `<br><a href="${item.source}" target="_blank">Fuente</a>`;
-      }
-    }
-
-    layer.bindTooltip(tooltip, { sticky: true });
-
-    layer.on({
-      mouseover: e => e.target.setStyle({ weight: 2, color: '#666', fillOpacity: 0.9 }),
-      mouseout: e => e.target.setStyle({ weight: 1, color: 'white', fillOpacity: 0.7 })
-    });
-  };
-
-  const geoLayer = L.geoJSON(geojsonData, {
-    style,
-    onEachFeature
-  }).addTo(map);
-
-  // Ajustar vista para que el mapa aparezca en tamaño correcto
-  map.fitBounds(geoLayer.getBounds());
-  setTimeout(() => map.invalidateSize(), 300);
-});
-
-// Leyenda
-const legend = L.control({ position: 'topleft' });
-
-legend.onAdd = () => {
-  const div = L.DomUtil.create('div', 'info legend');
-  div.style.background = 'rgba(255,255,255,0.85)';
-  div.style.padding = '8px 10px';
-  div.style.borderRadius = '6px';
-  div.style.fontFamily = 'Arial, sans-serif';
-  div.style.fontSize = '14px';
-  div.style.boxShadow = '0 0 8px rgba(0,0,0,0.2)';
-
-  div.innerHTML = `<strong>EN 301 549</strong><br>`;
-
-  for (const status in statusColors) {
-    div.innerHTML += `
-      <span style="
-        display:inline-block;
-        width:14px;
-        height:14px;
-        background:${statusColors[status]};
-        margin-right:6px;
-        border:1px solid #777;
-      "></span>${status}<br>`;
+  if (!entry) {
+    return `<strong>${name}</strong><br>Estado: unknown`;
   }
 
-  return div;
-};
+  // Escapa valores simples (si van a ser controlados por usuario, considera sanitizar mejor)
+  const status = entry.status || "unknown";
+  const version = entry.version || "n/a";
+  const source = entry.source ? `<a href="${entry.source}" target="_blank" rel="noopener noreferrer">Fuente</a>` : "n/a";
 
-legend.addTo(map);
+  return `
+    <strong>${name}</strong><br>
+    Estado: ${status}<br>
+    Versión: ${version}<br>
+    ${entry.source ? source : "Fuente: n/a"}
+  `;
+}
+
+function styleFeature(feature) {
+  const iso = feature.id;               // tu world.geojson usa "id": "AFG"
+  const entry = adoptionData[iso];
+  const status = entry ? entry.status : "unknown";
+
+  return {
+    fillColor: getColor(status),
+    weight: 1,
+    color: "#ffffff",
+    dashArray: "2",
+    fillOpacity: 0.8
+  };
+}
+
+async function initMap() {
+  map = L.map("map", {
+    center: [20, 0],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 6,
+    worldCopyJump: true
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors"
+  }).addTo(map);
+
+  // Cargar datos
+  const [adoptRes, geoRes] = await Promise.all([
+    fetch("adoption.json"),
+    fetch("world.geojson")
+  ]);
+
+  adoptionData = await adoptRes.json();
+  const geoData = await geoRes.json();
+
+  // Añadir GeoJSON con estilo y tooltips
+  geojsonLayer = L.geoJSON(geoData, {
+    style: styleFeature,
+    onEachFeature: (feature, layer) => {
+      const iso = feature.id;
+      const tooltip = buildTooltip(iso, feature.properties);
+      layer.bindTooltip(tooltip, { sticky: true });
+
+      layer.on({
+        mouseover: e => e.target.setStyle({ weight: 2, color: "#666", fillOpacity: 0.95 }),
+        mouseout: e => geojsonLayer.resetStyle(e.target)
+      });
+    }
+  }).addTo(map);
+
+  // Ajustar vista y corregir tamaño si container estaba oculto o sin layout
+  const bounds = geojsonLayer.getBounds();
+  if (bounds.isValid()) {
+    map.fitBounds(bounds, { padding: [20, 20] });
+  }
+  // Forzar recomputo de tamaño (evita mapa pequeño)
+  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.invalidateSize(), 800);
+}
+
+// Leyenda para los 3 estados reales
+function buildLegend() {
+  const legend = L.control({ position: "topleft" });
+
+  legend.onAdd = function () {
+    const div = L.DomUtil.create("div", "info legend");
+    div.style.background = "rgba(255,255,255,0.9)";
+    div.style.padding = "8px";
+    div.style.borderRadius = "6px";
+    div.style.fontFamily = "Arial, sans-serif";
+    div.style.fontSize = "13px";
+    div.style.boxShadow = "0 0 6px rgba(0,0,0,0.15)";
+
+    div.innerHTML = "<strong>EN 301 549</strong><br>";
+
+    const rows = [
+      { key: "adopted", label: "Adopted" },
+      { key: "referenced", label: "Referenced" },
+      { key: "unknown", label: "Unknown" }
+    ];
+
+    rows.forEach(r => {
+      div.innerHTML += `
+        <div style="margin-top:6px; line-height:14px;">
+          <span style="display:inline-block;width:14px;height:14px;background:${getColor(r.key)};margin-right:8px;border:1px solid #777;"></span>
+          ${r.label}
+        </div>
+      `;
+    });
+
+    return div;
+  };
+
+  buildLegend.control = legend;
+  legend.addTo(map);
+}
+
+// Inicializar
+initMap().then(buildLegend).catch(err => {
+  console.error("Error cargando mapa:", err);
+});
