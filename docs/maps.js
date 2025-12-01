@@ -28,9 +28,9 @@ function buildTooltip(iso, props) {
 
   return `
     <strong>${name}</strong><br>
-    Estado: ${status}<br>
-    Versión: ${version}<br>
-    ${entry.source ? source : "Fuente: n/a"}
+    Status: ${status}<br>
+    Version: ${version}<br>
+    ${entry.source ? source : "Source: n/a"}
   `;
 }
 
