@@ -11,17 +11,15 @@
 
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overscroll-behavior: none;
-    }
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  }
 
-    #map {
-      width: 100%;
-      height: 100dvh;        /* altura real del viewport en móviles */
-      min-height: 100dvh;    /* estabilidad en Android */
-      touch-action: none;    /* evita saltos del viewport en Android */
+  #map {
+  width: 100%;
+  height: 100dvh; /* el valor correcto en Android moderno */
     }
   </style>
 </head>
