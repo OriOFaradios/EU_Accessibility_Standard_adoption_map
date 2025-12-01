@@ -3,7 +3,7 @@
 
 (async function () {
   // --- map init
-  const map = L.map('map', { worldCopyJump: true, center: [20, 0], zoom: 2, minZoom: 2, maxZoom: 6 });
+  const map = L.map('map', { worldCopyJump: true, center: [30, 10], zoom: 2, minZoom: 2, maxZoom: 6 });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
 
   // --- color palette (exact statuses expected)
