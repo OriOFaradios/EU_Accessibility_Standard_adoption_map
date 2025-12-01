@@ -10,7 +10,7 @@ const maxBounds = L.latLngBounds(southWest, northEast);
 
 const map = L.map('map', {
 worldCopyJump: true,
-center: [35, 10],
+center: [41, 10],
 zoom: 2,
 minZoom: 2,
 maxZoom: 6,
@@ -182,7 +182,7 @@ attribution: '© OpenStreetMap'
   }
 
   // --- Legend (always add)
-  const legend = L.control({ position: 'topleft' });
+  const legend = L.control({ position: 'topright' });
   legend.onAdd = function () {
     const div = L.DomUtil.create('div', 'info legend');
     div.style.background = 'rgba(255,255,255,0.92)';
