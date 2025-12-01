@@ -181,27 +181,61 @@ attribution: '© OpenStreetMap'
     setTimeout(() => map.invalidateSize(), 250);
   }
 
-  // --- Legend (always add)
-  const legend = L.control({ position: 'topright' });
-  legend.onAdd = function () {
-    const div = L.DomUtil.create('div', 'info legend');
-    div.style.background = 'rgba(255,255,255,0.92)';
-    div.style.padding = '8px';
-    div.style.borderRadius = '6px';
-    div.style.fontFamily = 'Rubik, sans-serif';
-    div.style.fontSize = '13px';
-    div.innerHTML = '<strong>EN 301 549</strong><br>';
-    const rows = [
-      ['adopted', 'Adopted'],
-      ['referenced', 'Referenced'],
-      ['unknown', 'Unknown']
-    ];
-    rows.forEach(r => {
-      div.innerHTML += `<div style="margin-top:6px"><span style="display:inline-block;width:14px;height:14px;background:${getColor(r[0])};margin-right:8px;border:1px solid #777;"></span>${r[1]}</div>`;
-    });
-    return div;
-  };
-  legend.addTo(map);
+// --- Legend (always add)
+const legend = L.control({ position: 'topright' });
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create('div', 'info legend');
+  div.style.background = 'rgba(255,255,255,0.92)';
+  div.style.padding = '10px 12px';
+  div.style.borderRadius = '6px';
+  div.style.fontFamily = 'Rubik, sans-serif';
+  div.style.fontSize = '13px';
+  div.style.lineHeight = '1.35';
+
+  // Título
+  div.innerHTML = `
+    <strong>Accessibility requirements for ICT products and services</strong><br>
+    ETSI EN 301 549<br>
+  `;
+
+  // Filas de estado
+  const rows = [
+    ['adopted', 'Adopted'],
+    ['referenced', 'Referenced'],
+    ['unknown', 'Unknown']
+  ];
+
+  rows.forEach(r => {
+    div.innerHTML += `
+      <div style="margin-top:6px">
+        <span style="
+          display:inline-block;
+          width:14px;
+          height:14px;
+          background:${getColor(r[0])};
+          margin-right:8px;
+          border:1px solid #777;
+        "></span>${r[1]}
+      </div>
+    `;
+  });
+
+  // Línea adicional con enlace
+  div.innerHTML += `
+    <div style="margin-top:10px; font-size:12px; color:#333;">
+      Want to know more about the latest EN 301 549 revision?<br>
+      Visit the project:
+      <a href="https://labs.etsi.org/rep/HF/en301549" target="_blank" style="color:#1f78b4; text-decoration:none;">
+        ETSI GitLab
+      </a>
+    </div>
+  `;
+
+  return div;
+};
+
+legend.addTo(map);
 
   // --- Diagnostic log summary
   console.info(`adoption.json entries: ${Object.keys(adoptionData).length}`);
