@@ -8,8 +8,8 @@
 
   // --- color palette (exact statuses expected)
   const COLORS = {
-    adopted: '#2ca02c',
-    referenced: '#ff7f0e',
+    adopted: '#02488d', // primary etsi.org
+    referenced: '#007dc0', // secondary etsi.org
     unknown: '#d3d3d3'
   };
 
@@ -171,7 +171,7 @@
     div.style.background = 'rgba(255,255,255,0.92)';
     div.style.padding = '8px';
     div.style.borderRadius = '6px';
-    div.style.fontFamily = 'Arial, sans-serif';
+    div.style.fontFamily = 'Rubik, sans-serif';
     div.style.fontSize = '13px';
     div.innerHTML = '<strong>EN 301 549</strong><br>';
     const rows = [
