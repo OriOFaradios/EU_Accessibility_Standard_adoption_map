@@ -2,30 +2,32 @@
 // Expects world.geojson uses feature.id = ISO_A3 (but also checks properties.ISO_A3 / properties.iso_a3 / properties.ADM0_A3)
 
 (async function () {
-// --- map init with restricted bounds
-const southWest = L.latLng(-75, -180);
-const northEast = L.latLng(82, 180);
-const maxBounds = L.latLngBounds(southWest, northEast);
+  // --- map init with restricted bounds
+  const southWest = L.latLng(-75, -180);
+  const northEast = L.latLng(82, 180);
+  const maxBounds = L.latLngBounds(southWest, northEast);
 
+  const map = L.map('map', {
+    worldCopyJump: true,
+    center: [55, 10],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 6,
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1.0,
+    preferCanvas: false
+  });
 
-const map = L.map('map', {
-worldCopyJump: true,
-center: [55, 10],
-zoom: 2,
-minZoom: 2,
-maxZoom: 6,
-maxBounds: maxBounds,
-maxBoundsViscosity: 1.0
-});
+  // Expose map globally so index.html fixes can use window.map.invalidateSize()
+  window.map = map;
 
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '© OpenStreetMap'
-}).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
 
   // --- color palette (exact statuses expected)
   const COLORS = {
-    adopted: '#02488d', // primary etsi.org
+    adopted: '#02488d',    // primary etsi.org
     referenced: '#007dc0', // secondary etsi.org
     unknown: '#d3d3d3'
   };
@@ -52,7 +54,6 @@ attribution: '© OpenStreetMap'
     const txt = await res.text();
     try {
       adoptionData = JSON.parse(txt);
-      // ensure keys are uppercase (defensive)
       adoptionData = Object.fromEntries(Object.entries(adoptionData).map(([k, v]) => [String(k).toUpperCase(), v]));
     } catch (parseErr) {
       console.error('adoption.json parse error:', parseErr);
@@ -154,7 +155,6 @@ attribution: '© OpenStreetMap'
     layer.on({
       mouseover: (e) => {
         e.target.setStyle({ weight: 2, color: '#666', fillOpacity: 0.95 });
-        // bring to front where possible (for better hover on small shapes)
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
           try { e.target.bringToFront(); } catch (_) { /* ignore */ }
         }
@@ -178,38 +178,93 @@ attribution: '© OpenStreetMap'
   const bounds = geoLayer.getBounds();
   if (bounds && bounds.isValid && bounds.isValid()) {
     map.fitBounds(bounds, { padding: [20, 20] });
-    setTimeout(() => map.invalidateSize(), 250);
+    // ensure Leaflet recomputes after fitBounds & layout changes
+    setTimeout(() => map.invalidateSize(), 300);
+    requestAnimationFrame(() => map.invalidateSize());
   }
-  
-// --- Legend
-// --- Legend (responsive + zoom-friendly)
-const legend = L.control({ position: 'topright' });
 
-legend.onAdd = function () {
-  const div = L.DomUtil.create('div', 'legend-container');
+  // --- Legend (responsive + zoom-friendly, preserves background/colors)
+  const legend = L.control({ position: 'topright' });
 
-  div.innerHTML = `
-    <div class="legend-title">
-      <span>Accessibility requirements for ICT products and services</span><br>
-      <strong>ETSI EN 301 549</strong>
-    </div>
+  legend.onAdd = function () {
+    // use leaflet-control + legend classes so CSS rules apply consistently
+    const div = L.DomUtil.create('div', 'leaflet-control legend legend-container');
 
-    <div class="legend-items">
-      <div class="legend-item"><span class="color" style="background:${getColor('adopted')}"></span> Adopted</div>
-      <div class="legend-item"><span class="color" style="background:${getColor('referenced')}"></span> Referenced</div>
-      <div class="legend-item"><span class="color" style="background:${getColor('unknown')}"></span> Unknown</div>
-    </div>
+    div.innerHTML = `
+      <div class="legend-container-inner">
+        <div class="legend-title">
+          Accessibility requirements for ICT products and services<br>
+          <strong>ETSI EN 301 549</strong>
+        </div>
 
-    <div class="legend-footer">
-      Want to know more about the latest EN 301 549 revision?<br>
-      <a href="https://labs.etsi.org/rep/HF/en301549" target="_blank">ETSI GitLab</a>
-    </div>
-  `;
+        <div class="legend-items">
+          <div class="legend-item"><span class="legend-color" data-status="adopted" style="background:${getColor('adopted')}"></span> Adopted</div>
+          <div class="legend-item"><span class="legend-color" data-status="referenced" style="background:${getColor('referenced')}"></span> Referenced</div>
+          <div class="legend-item"><span class="legend-color" data-status="unknown" style="background:${getColor('unknown')}"></span> Unknown</div>
+        </div>
 
-  return div;
-};
+        <div class="legend-footer">
+          Want to know more about the latest EN 301 549 revision?<br>
+          <a href="https://labs.etsi.org/rep/HF/en301549" target="_blank" rel="noopener noreferrer">ETSI GitLab</a>
+        </div>
+      </div>
+    `;
 
-legend.addTo(map);
+    // prevent clicks on legend from affecting map dragging/zoom
+    L.DomEvent.disableClickPropagation(div);
+    L.DomEvent.disableScrollPropagation(div);
+
+    return div;
+  };
+
+  legend.addTo(map);
+
+  // --- Legend behavior: adjust font-size/padding based on zoom (keeps background intact)
+  function adjustLegendForZoom() {
+    const z = map.getZoom();
+    const legendEl = document.querySelector('.leaflet-control.legend');
+    if (!legendEl) return;
+
+    // base font size and padding per zoom — tune numbers if needed
+    let fontSize = 14; // px
+    let padV = 10;     // px vertical padding
+
+    if (z <= 2) { fontSize = 11; padV = 8; }
+    else if (z === 3) { fontSize = 12; padV = 9; }
+    else if (z === 4) { fontSize = 14; padV = 10; }
+    else if (z === 5) { fontSize = 15; padV = 11; }
+    else if (z >= 6) { fontSize = 16; padV = 12; }
+
+    legendEl.style.fontSize = fontSize + 'px';
+    legendEl.style.padding = padV + 'px 12px';
+
+    // ensure color squares keep correct colors in case CSS or runtime overrides
+    const colorEls = legendEl.querySelectorAll('.legend-color');
+    colorEls.forEach(el => {
+      const s = el.getAttribute('data-status');
+      if (s) el.style.background = getColor(s);
+    });
+  }
+
+  // initial adjustment and listener
+  adjustLegendForZoom();
+  map.on('zoomend', adjustLegendForZoom);
+
+  // also adapt on resize/orientation changes
+  window.addEventListener('resize', () => {
+    // small delay to let browser finish layout
+    setTimeout(() => {
+      map.invalidateSize();
+      adjustLegendForZoom();
+    }, 180);
+  });
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      map.invalidateSize();
+      adjustLegendForZoom();
+    }, 300);
+  });
 
   // --- Diagnostic log summary
   console.info(`adoption.json entries: ${Object.keys(adoptionData).length}`);
