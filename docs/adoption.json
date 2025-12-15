@@ -109,7 +109,7 @@
 
   "IDN": { "status": "unknown", "source": "", "version": "" },
   "IMN": { "status": "unknown", "source": "", "version": "" },
-  "IND": { "status": "referenced", "version": "IS 17802 Part 1 (references EN 301 549 v3.2.1)", "source": "https://broadbandindiaforum.in/wp-content/uploads/2022/08/IS-17802_1_2021.pdf" },
+  "IND": { "status": "adopted", "version": "IS 17802 Part 1 (references EN 301 549 v3.2.1)", "source": "https://broadbandindiaforum.in/wp-content/uploads/2022/08/IS-17802_1_2021.pdf" },
   "IOT": { "status": "unknown", "source": "", "version": "" },
   "IRL": { "status": "adopted", "version": "3.2.1", "source": "https://digital-strategy.ec.europa.eu/en/policies/latest-changes-accessibility-standard" },
   "IRN": { "status": "unknown", "source": "", "version": "" },
